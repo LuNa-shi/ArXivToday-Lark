@@ -4,17 +4,22 @@ Main Script
 
 import os
 import datetime
-from arxiv_paper import get_latest_papers, filter_papers_by_keyword, deduplicate_papers, prepend_to_json_file
-from llm_translation import translate_abstracts
+from arxiv_paper import get_latest_papers, deduplicate_papers_across_categories, filter_papers_by_keyword, filter_papers_using_llm, deduplicate_papers, prepend_to_json_file, translate_abstracts
 from lark_post import post_to_lark_webhook
+from utils import load_config
 
-# Paper Configuration  TODO: Change paper configuration for your own need
-tag = 'LLM Security'
-category_list = ['cs.CL', 'cs.CV', 'cs.AI']
-keyword_list = [
-    'safety', 'security', 'adversarial', 'jailbreak', 'backdoor', 'hallucination', 'victim'
-]
+
+# Load Configuration
+config = load_config()
+tag = config['tag']
+category_list = config['category_list']
+keyword_list = config['keyword_list']
+use_llm_for_filtering = config['use_llm_for_filtering']
+
 paper_file = os.path.join(os.path.dirname(__file__), 'papers.json')
+if use_llm_for_filtering:
+    with open(os.path.join(os.path.dirname(__file__), 'paper_to_hunt.md'), 'r', encoding='utf-8') as f:
+        paper_to_hunt = f.read()
 
 
 def task():
@@ -29,19 +34,27 @@ def task():
         papers.extend(get_latest_papers(category, max_results=100))
     print('Total papers: {}'.format(len(papers)))
 
-    papers = filter_papers_by_keyword(papers, keyword_list)
-    print('Filtered papers: {}'.format(len(papers)))
+    # Deduplicate papers across categories
+    papers = deduplicate_papers_across_categories(papers)
+
+    if keyword_list:
+        papers = filter_papers_by_keyword(papers, keyword_list)
+    print('Filtered papers by Keyword: {}'.format(len(papers)))
+
+    if use_llm_for_filtering:
+        papers = filter_papers_using_llm(papers, paper_to_hunt, config)
+        print('Filtered papers by LLM: {}'.format(len(papers)))
 
     papers = deduplicate_papers(papers, paper_file)
     print('Deduplicated papers: {}'.format(len(papers)))
 
-    papers = translate_abstracts(papers)
+    papers = translate_abstracts(papers, config)
     print('Translated Abstracts into Chinese')
 
     prepend_to_json_file(paper_file, papers)
 
     # Post to Lark Webhook
-    post_to_lark_webhook(tag, papers)
+    post_to_lark_webhook(tag, papers, config)
 
 
 if __name__ == '__main__':

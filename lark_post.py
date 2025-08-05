@@ -5,12 +5,9 @@ HTTP POST request to Lark Webhook API
 import json
 import datetime
 import requests
-from utils import load_config
 
 
-def post_to_lark_webhook(tag, papers):
-    config = load_config()
-
+def post_to_lark_webhook(tag: str, papers: list, config: dict):
     headers = {
         'Content-Type': 'application/json'
     }
@@ -90,4 +87,6 @@ if __name__ == '__main__':
             'zh_abstract': '中文摘要 2'
         }
     ]
-    post_to_lark_webhook('test', papers)
+    from utils import load_config
+    config = load_config()
+    post_to_lark_webhook('test', papers, config)

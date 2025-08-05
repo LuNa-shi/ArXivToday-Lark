@@ -26,3 +26,39 @@ api_key: 'ollama'
 # api_key: 'sk-xxxxx'
 
 ######### <<< LLM Server Config EXAMPLE <<< #########
+
+
+# Paper Configuration
+tag: 'LLM Security'  # Tag for Feishu(Lark) Card
+
+category_list:  # arXiv categories to search for papers
+  - cs.CL  # Computation and Language
+  - cs.AI  # Artificial Intelligence
+  - cs.CV  # Computer Vision and Pattern Recognition
+  - cs.CR  # Cryptography and Security
+  - cs.LG  # Machine Learning
+
+keyword_list:  # Keywords to filter papers
+  - safety
+  - security
+  - jailbreak
+  - adversarial
+  - moderation
+  - guard
+  - alignment
+  - backdoor
+  - hallucination
+  - privacy
+  - intellectual property
+  - victim
+
+# Use LLM for More Accurate Paper Filtering
+use_llm_for_filtering: true  # Set to false to disable LLM-based filtering
+
+######### >>> LLM-Based Paper Filtering >>> #########
+# If set to true, `paper_to_hunt.md` file in the project root directory will be used for LLM-based filtering.
+# You can modify the prompt in `paper_to_hunt.md` to describe the paper you want to hunt for.
+#
+# If you want to use LLM-Based Filtering **only** (without Keyword Filtering), set `keyword_list` to an empty list like below:
+# keyword_list: []
+######### <<< LLM-Based Paper Filtering <<< #########

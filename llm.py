@@ -50,7 +50,7 @@ def translate_abstract(abstract: str, config: dict):
     :param config: the configuration of LLM Server
     :return: the translated abstract or None if failed
     """
-    prompt = f'请将下面的学术论文摘要翻译为中文：\n{abstract}\n\n**注意**：\n- 中文语境中常用的英文学术术语可以保留英文原文，如：自然语言处理中的 Transformer 可以保留英文。\n- 其他关键的学术术语可以中英文对照，如：后门攻击(Backdoor Attack)。\n- 直接给出翻译结果，不需要进行解释，不需要任何其他内容。'
+    prompt = f'请根据下面的学术论文摘要回答以下问题：\n{abstract}\n问题一：一句话总结这篇文章提出或尝试解决的问题是什么？问题二：简要概括这篇文章解决方法是如何的？分小点回答；问题三：简要陈述这篇文章做了什么实验，取得了什么结果？\n**注意**：\n- 中文语境中常用的英文学术术语可以保留英文原文，如：自然语言处理中的 Transformer 可以保留英文。\n- 其他关键的学术术语可以中英文对照，如：后门攻击(Backdoor Attack)。\n- 使用 Q：\n A：\n的格式回答，使用纯文本格式，不要使用 markdown 格式。'
     translated_text = get_llm_response(prompt, config)
     if not translated_text:
         return None

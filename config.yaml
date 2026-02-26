@@ -9,37 +9,37 @@ webhook_url: 'https://open.feishu.cn/open-apis/bot/v2/hook/7d813083-5f05-4507-92
 # `ArXivToday.card` can be imported into Lark as a card template.
 # After import, replace the fields below with the generated values from Lark.
 template_id: 'AAq2Qvj02QJWh'  # TODO: Replace with template_id generated after importing ArXivToday.card
-template_version_name: '1.0.0'  # TODO: Replace with template_version_name from Lark template
+template_version_name: '1.0.1'  # TODO: Replace with template_version_name from Lark template
 # ------------------------------------------------------------------------------------------------------------ #
 
 
 # ==================================== Paper Configuration ==================================== #
 # ------------------------------------------------------------------------------------------------------------ #
-tag: 'LLM Security'  # Tag for Feishu(Lark) Card
+tag: 'VLN & VLA'  # Tag for Feishu(Lark) Card
 
 category_list:  # arXiv categories to search for papers
   - cs.CL  # Computation and Language
   - cs.AI  # Artificial Intelligence
   - cs.CV  # Computer Vision and Pattern Recognition
-  - cs.CR  # Cryptography and Security
-  - cs.LG  # Machine Learning
+  - cs.RO
+  - cs.LG
+
 
 keyword_list:  # Keywords to filter papers
-  - safety
-  - security
-  - jailbreak
-  - adversarial
-  - moderation
-  - guard
-  - alignment
-  - backdoor
-  - hallucination
-  - privacy
-  - intellectual property
-  - vulnerability
-  - vulnerabilities
-  - poison
-  - victim
+  - vision-language navigation
+  - vision language navigation
+  - VLN
+  - embodied navigation
+  - embodied ai
+  - object navigation
+  - objectnav
+  - visual navigation
+  - navigation policy
+  - vision-language-action
+  - vision language action
+  - VLA
+  - robot policy
+  - action model
 # ------------------------------------------------------------------------------------------------------------ #
 
 
@@ -59,9 +59,9 @@ keyword_list:  # Keywords to filter papers
 # api_key: 'ollama'  # Any non-empty string works (Ollama does not require authentication)
 
 ## 2. For Other OpenAI SDK-Compatibale LLM Server ##
-model: 'qwen/qwen3-vl-235b-a22b-thinking'
+model: 'qwen/qwen3-235b-a22b-2507'
 base_url: 'https://openrouter.ai/api/v1'
-api_key: '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'
+api_key: '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'
 
 #### <<< LLM Server Config EXAMPLE <<< ####
 

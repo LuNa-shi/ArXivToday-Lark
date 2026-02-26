@@ -1,23 +1,20 @@
-我正在寻找关于 **大语言模型** (Large Language Model, LLM) **安全** 的相关论文，特别关注以下方面（**包括但不限于**）：
-- LLM 的安全性（safety）和安全保障（security）机制
-- 针对 LLM 的越狱攻击（Jailbreak Attack）方法及其防御对策
-- 针对 LLM 的对抗攻击（Adversarial Attack）方法及其防御对策
-- LLM 生成内容的安全性（Content Moderation）以及内容安全护栏（Guard）
-- LLM 的安全对齐和价值观对齐（Alignment）
-- LLM 生成内容安全性的可解释性研究
-- 安全评估框架和基准测试（Benchmark）
-- LLM 中的后门（Backdoor）植入及检测
-- 隐私保护和数据安全相关研究
-    - 隐私保护的 LLM 推理（Privacy-Preserving Inference）
-    - 针对 LLM 的成员推断攻击（Membership Inference Attack, MIA）及其防御对策
-    - LLM 模型的知识产权（Intellectual Property）保护，如模型水印（Watermark）、模型指纹（Fingerprint）等
-- 对抗样本生成及其在LLM安全中的应用
-- LLM 的幻觉（Hallucination）问题及缓解方法
-- 针对 **多模态大模型** （Multi-Modal, Vision-Language Model）的 安全性 相关的工作
-- LLM 及其应用系统的安全，包括但不限于以下内容
-    - 检索增强生成系统（Retrieval-Augmented Generation, RAG）的安全
-    - 智能体（Agent）安全
-    - LLM 调用外部工具的安全，如模型上下文协议（Model Context Protocol, MCP）的安全
-- LLM for Safety / Security
+我正在寻找关于 **Vision-Language Navigation (VLN)**、**Embodied Navigation**、**Object Navigation** 以及 **Vision-Language-Action (VLA) Models** 的论文，特别关注以下方向（包括但不限于）：
 
-相关研究可能包括但不限于：攻击方法分析、安全防御机制设计、有害输出过滤技术、模型对齐与安全训练方法、风险评估方法等。
+- Vision-Language Navigation（VLN）任务与方法（如 R2R、RxR、R4R 等）
+- Embodied AI / Embodied Navigation 场景下的感知、规划与决策
+- Object Navigation（ObjectNav）任务中的目标定位、语义地图构建与策略学习
+- Vision-Language-Action 模型（VLA）在机器人/智能体中的端到端控制与动作生成
+- CoT in VLA:   具身智能中使用思维链和post training 的方法，机器人 reasoning
+- 多模态表征学习：视觉、语言与动作空间的对齐与融合
+- 导航与操作中的泛化能力（跨场景、跨任务、跨平台）
+- 数据集与基准测试：导航、具身智能、机器人操作相关 benchmark
+- 训练范式：模仿学习、强化学习、离线策略学习、指令微调
+- 推理与执行：长时序任务、分层策略、任务分解、记忆机制
+- 真实世界部署：仿真到真实（Sim2Real）、鲁棒性、效率与安全约束
+
+我优先关注能够推进实际导航与具身执行能力的研究，例如：
+- 使用视觉+语言输入驱动导航/操作决策
+- 在复杂环境中进行目标导向导航与交互
+- 将语言指令转化为可执行动作序列的模型与系统
+
+相关论文可以是方法创新、系统实现、数据集构建、评测基准或综合对比研究。

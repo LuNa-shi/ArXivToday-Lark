@@ -3,11 +3,13 @@
 # ==================================== Feishu(Lark) Configuration ==================================== #
 # ------------------------------------------------------------------------------------------------------------ #
 # Feishu(Lark) Bot Webhook URL
-webhook_url: 'https://open.feishu.cn/open-apis/bot/v2/hook/XXXXX'  # TODO: Change to your Webhook URL
+webhook_url: 'https://open.feishu.cn/open-apis/bot/v2/hook/7d813083-5f05-4507-9267-e8fb4266214d'
 
 # Feishu(Lark) Card Template
-template_id: 'XXXXX'  # TODO: Change to your template_id
-template_version_name: '1.0.0'  # TODO: Change to your template_version_name
+# `ArXivToday.card` can be imported into Lark as a card template.
+# After import, replace the fields below with the generated values from Lark.
+template_id: 'AAq2Qvj02QJWh'  # TODO: Replace with template_id generated after importing ArXivToday.card
+template_version_name: '1.0.0'  # TODO: Replace with template_version_name from Lark template
 # ------------------------------------------------------------------------------------------------------------ #
 
 
@@ -45,9 +47,9 @@ keyword_list:  # Keywords to filter papers
 # ------------------------------------------------------------------------------------------------------------ #
 
 # LLM Server Config
-model: 'deepseek-r1:32b'
-base_url: 'http://localhost:11434/v1'  # NOTE: For ollama, need to add '/v1' at the end of the OLLAMA_HOST URL
-api_key: 'ollama'
+# model: 'deepseek-r1:32b'
+# base_url: 'http://localhost:11434/v1'  # NOTE: For ollama, need to add '/v1' at the end of the OLLAMA_HOST URL
+# api_key: 'ollama'
 
 #### >>> LLM Server Config EXAMPLE >>> ####
 
@@ -57,9 +59,9 @@ api_key: 'ollama'
 # api_key: 'ollama'  # Any non-empty string works (Ollama does not require authentication)
 
 ## 2. For Other OpenAI SDK-Compatibale LLM Server ##
-# model: 'gpt-4o-mini'
-# base_url: 'https://api.openai.com/v1'
-# api_key: 'sk-xxxxx'
+model: 'qwen/qwen3-vl-235b-a22b-thinking'
+base_url: 'https://openrouter.ai/api/v1'
+api_key: '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'
 
 #### <<< LLM Server Config EXAMPLE <<< ####
 

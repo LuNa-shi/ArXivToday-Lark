@@ -43,6 +43,9 @@ def task():
         papers = filter_papers_by_keyword(papers, keyword_list)
     print('Filtered papers by Keyword: {}'.format(len(papers)))
 
+    # Limit to first 10 for testing (remove in production)
+    papers = papers[:10]
+
     if use_llm_for_filtering:
         papers = filter_papers_using_llm(papers, paper_to_hunt, config)
         print('Filtered papers by LLM: {}'.format(len(papers)))

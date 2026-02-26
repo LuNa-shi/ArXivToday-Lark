@@ -3,6 +3,7 @@ Utility Functions
 """
 
 import os
+import time
 import yaml
 from openai import OpenAI
 
@@ -49,9 +50,14 @@ def get_llm_response(prompt: str, config: dict):
         'stream': False,
     }
 
+    timeout_seconds = float(config.get('llm_timeout_seconds', 30))
+    max_attempts = int(config.get('llm_max_retries', 3)) + 1
+    retry_base_seconds = float(config.get('llm_retry_base_seconds', 1))
+
     client = OpenAI(
         api_key=api_key,
-        base_url=base_url
+        base_url=base_url,
+        timeout=timeout_seconds
     )
 
     messages = [
@@ -60,16 +66,26 @@ def get_llm_response(prompt: str, config: dict):
             'content': prompt
         },
     ]
-    try:
-        response = client.chat.completions.create(
-            model=model,
-            messages=messages,
-            **generation_config
-        )
-        return response.choices[0].message.content.strip()
-    except Exception as e:
-        print('LLM Server Error: {}'.format(e))
-        return None
+    for attempt in range(max_attempts):
+        try:
+            response = client.chat.completions.create(
+                model=model,
+                messages=messages,
+                **generation_config
+            )
+            return response.choices[0].message.content.strip()
+        except Exception as e:
+            if attempt == max_attempts - 1:
+                print('LLM Server Error: {}'.format(e))
+                return None
+
+            wait_seconds = retry_base_seconds * (2 ** attempt)
+            print(
+                'LLM request failed (attempt {}/{}): {}. Retrying in {:.1f}s...'.format(
+                    attempt + 1, max_attempts, e, wait_seconds
+                )
+            )
+            time.sleep(wait_seconds)
 
 
 if __name__ == '__main__':

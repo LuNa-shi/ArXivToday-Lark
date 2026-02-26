@@ -4,6 +4,7 @@ Get arXiv papers
 
 import os
 import json
+import time
 import arxiv
 from tqdm import tqdm
 from llm import is_paper_match, translate_abstract
@@ -16,7 +17,12 @@ def get_latest_papers(category, max_results=100):
     :param max_results: the maximum number of papers to get
     :return: a list of papers
     """
-    client = arxiv.Client()
+    # Keep arXiv access conservative to reduce 429 rate-limit errors.
+    client = arxiv.Client(
+        page_size=min(100, max_results),
+        delay_seconds=3.0,
+        num_retries=3
+    )
     search_query = f'cat:{category}'
     search = arxiv.Search(
         query=search_query,
@@ -24,24 +30,43 @@ def get_latest_papers(category, max_results=100):
         sort_by=arxiv.SortCriterion.SubmittedDate
     )
 
-    papers = []
-    for result in client.results(search):
-        # Remove the version number from the id
-        paper_id = result.get_short_id()
-        version_pos = paper_id.find('v')
-        if version_pos != -1:
-            paper_id = paper_id[:version_pos]
+    # Additional guard around the library retries for bursty 429 periods.
+    max_attempts = 4
+    for attempt in range(max_attempts):
+        try:
+            papers = []
+            for result in client.results(search):
+                # Remove the version number from the id
+                paper_id = result.get_short_id()
+                version_pos = paper_id.find('v')
+                if version_pos != -1:
+                    paper_id = paper_id[:version_pos]
 
-        paper = {
-            'title': result.title,
-            'id': paper_id,
-            'abstract': result.summary.replace('\n', ' '),  # Remove line breaks
-            'url': result.entry_id,
-            'published': result.published.date().isoformat()  # Get the date in ISO format
-        }
-        papers.append(paper)
+                paper = {
+                    'title': result.title,
+                    'id': paper_id,
+                    'abstract': result.summary.replace('\n', ' '),  # Remove line breaks
+                    'url': result.entry_id,
+                    'published': result.published.date().isoformat()  # Get the date in ISO format
+                }
+                papers.append(paper)
+            return papers
+        except Exception as e:
+            err_msg = str(e)
+            if '429' in err_msg and attempt < max_attempts - 1:
+                wait_seconds = 2 ** attempt
+                print(
+                    "arXiv rate limit hit for category {}. Retry {}/{} after {}s.".format(
+                        category, attempt + 1, max_attempts - 1, wait_seconds
+                    )
+                )
+                time.sleep(wait_seconds)
+                continue
 
-    return papers
+            print('Failed to fetch papers for category {}: {}'.format(category, e))
+            return []
+
+    return []
 
 
 def deduplicate_papers_across_categories(papers):
@@ -92,6 +117,9 @@ def filter_papers_using_llm(papers, paper_to_hunt, config: dict):
     :param config: the configuration of LLM Server
     :return: a list of filtered papers
     """
+    if not papers:
+        return []
+
     results = []
     for paper in papers:
         if is_paper_match(paper, paper_to_hunt, config):
